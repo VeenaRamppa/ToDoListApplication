@@ -30,7 +30,9 @@ class ToDoListTest {
 		
 		assertEquals(true,toDoList.isDuplicateTaskName("Gather requirements"));
 		
-		assertEquals(true,toDoList.addTask(taskTitle, taskDate, project));
+		assertEquals(true,toDoList.addTask(taskTitle, taskDate, project));	
+		
+		assertEquals(false,toDoList.isDuplicateTaskName("Project estimation"));
 		
 	}
 
