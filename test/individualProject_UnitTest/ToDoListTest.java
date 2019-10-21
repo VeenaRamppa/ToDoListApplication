@@ -14,9 +14,10 @@ import individualProject_Classes.User;
 
 class ToDoListTest {
 	ToDoList toDoList = new ToDoList();
+
 	@Test
 	void testAddTask() {
-		
+
 		User testUser = new User("Vihaan");
 		String taskTitle = "Gather requirements";
 		Project project = new Project("ToDoList");
@@ -24,16 +25,16 @@ class ToDoListTest {
 		SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
 		try {
 			taskDate = sdf.parse("10/21/2019");
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
-		}		
-		
-		assertEquals(true,toDoList.isDuplicateTaskName("Gather requirements"));
-		
-		assertEquals(true,toDoList.addTask(taskTitle, taskDate, project));	
-		
-		assertEquals(false,toDoList.isDuplicateTaskName("Project estimation"));
-		
+		}
+		assertEquals(true, toDoList.addTask(taskTitle, taskDate, project));
+	}
+
+	@Test
+	void testIsDuplicateTask() {
+		assertEquals(true, toDoList.isDuplicateTaskName("Gather requirements"));
+		assertEquals(false, toDoList.isDuplicateTaskName("Project estimation"));
 	}
 
 }
