@@ -1,6 +1,7 @@
 package individualProject_UnitTest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +30,12 @@ class ToDoListTest {
 			e.printStackTrace();
 		}
 		assertEquals(true, toDoList.addTask(taskTitle, taskDate, project));
+		project = null;
+		try {
+			assertEquals(false, toDoList.addTask("", taskDate, project));
+		} catch (NullPointerException e) {
+
+		}
 	}
 
 	@Test
