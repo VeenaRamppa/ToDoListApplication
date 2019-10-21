@@ -132,12 +132,18 @@ public class ToDoList {
 	public boolean addTask(String taskName, Date taskDate, Project project) {
 		boolean chkFlag = false;
 		fileHandler = new FileHandler();
-		Task task = new Task(taskName, taskDate, project);
-
+		Task task = null;
+		try {
+			task = new Task(taskName, taskDate, project);
+		} catch (NullPointerException e) {
+			//e.printStackTrace();
+		}
 		// write the contents of listOfTasks to file here
-		String fileWriteStr = fileHandler.writeToFile(task);
-		if ((fileWriteStr.split(":")[0].equals(Constants.SUCCESS))) {
-			chkFlag = true;
+		if (task != null) {
+			String fileWriteStr = fileHandler.writeToFile(task);
+			if ((fileWriteStr.split(":")[0].equals(Constants.SUCCESS))) {
+				chkFlag = true;
+			}
 		}
 		return chkFlag;
 	}
@@ -229,15 +235,14 @@ public class ToDoList {
 			validTaskName = isValidTaskTitle(tmpTaskList, tmpTaskName);
 		}
 
-		
 		while (!quit) {
 			editMenu();
 			System.out.println("\nEnter your option: ");
-			int choice ;
+			int choice;
 			while (!scan4.hasNextInt()) {
 				System.out.println("Please enter number only");
 				scan4.next();
-				
+
 			}
 			choice = scan4.nextInt();
 			oldTask = new Task();
@@ -288,7 +293,7 @@ public class ToDoList {
 				System.out.println(msg);
 				break;
 			case 4:
-				msg = removeTask(tmpTaskName, tmpTaskList,listOfOtherProject);
+				msg = removeTask(tmpTaskName, tmpTaskList, listOfOtherProject);
 				System.out.println(msg);
 				break;
 			case 5:
@@ -307,7 +312,7 @@ public class ToDoList {
 	}
 
 // removeTask() - this operation is used to remove a task from the project and update the file accordingly
-	public String removeTask(String str, List<Task> tmpTaskList,List<Task> listOfOtherProject) {
+	public String removeTask(String str, List<Task> tmpTaskList, List<Task> listOfOtherProject) {
 		Iterator<Task> iterator = tmpTaskList.iterator();
 		while (iterator.hasNext()) {
 			if (iterator.next().getTaskTitle().equals(str)) {
