@@ -5,11 +5,8 @@ package individualProject_Classes;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 public class DateValidator {
-
 	public static Date isThisDateValid(String dateToValidate) throws ParseException {
-
 		if (dateToValidate == null) {
 			return null;
 		}
@@ -21,13 +18,10 @@ public class DateValidator {
 			date = sdf.parse(dateToValidate);
 			if (date.compareTo(new Date()) == -1)
 				return null;
-
 		} catch (ParseException e) {
 			System.out.println("Enter date in correct format (MM/dd/yyyy)");
 			return null;
 		}
-
 		return date;
 	}
-
 }

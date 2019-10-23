@@ -8,8 +8,6 @@ package individualProject_Classes;
  * --- main() method invokes the startToDoApp() method of User class to start the application, and invokes saveAndQuit() method during end 
  * 	   of the application
  */
-
-
 public class ToDoListMain {
 
 	public static void main(String args[]) {

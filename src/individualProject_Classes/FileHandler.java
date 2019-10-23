@@ -4,8 +4,6 @@ package individualProject_Classes;
  * The purpose of this class is used to perform operations related to files.
  * Writing data in to a file, search in file ,reading data from file.
  */
-
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,16 +15,14 @@ import java.util.ArrayList;
 
 public class FileHandler {
 	private File file;
-
 	public FileHandler() {
 		this.file = new File(Constants.FILE_PATH);
-	}
-	
- // writeToFile(Task task) - method is used to write a task in to file and returns a string indicating writing into file is success or not
- 
+	}	
+/* writeToFile(Task task)  
+* --- this method is used to write a task in to file,returns a string indicating writing into file is success or not 
+*/
 	public String writeToFile(Task task) {
 		BufferedWriter bw = null;
-
 		try {
 			bw = new BufferedWriter(new FileWriter(file, true));
 			if (file.exists()) {
@@ -40,14 +36,12 @@ public class FileHandler {
 				bw.write("Task title" + Constants.COMMA + "Due Date" + Constants.COMMA + "Status" + Constants.COMMA
 						+ "Project Name");
 			}
-
 			bw.write(task.toString());
 			bw.append("\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 			return Constants.ERROR + ": Something went wrong while adding a task " + e.getMessage();
 		}
-
 		finally {
 			if (bw != null) {
 				try {
@@ -58,10 +52,11 @@ public class FileHandler {
 				}
 			}
 		}
-
 		return Constants.SUCCESS + ": Task added successfully";
 	}
-// readFromFile() - operation of this function is to read task details from the file and it returns list of tasks.
+/* readFromFile()
+ * --- operation of this function is to read task details from the file and it returns list of tasks. 
+ */
 	public List<Task> readFromFile() {
 		BufferedReader br = null;
 		List<Task> fileContent = new ArrayList<Task>();
@@ -90,8 +85,9 @@ public class FileHandler {
 		}
 		return fileContent;
 	}
-
-// searchInFile - this function takes string parameter to be searched in file and if the string is found returns list of tasks related to it.
+/* searchInFile
+ * --- this function takes string parameter to be searched in file and if the string is found returns list of tasks related to it.
+ */
 	public List<Task> searchInFile(String str) {
 		BufferedReader br = null;
 		List<Task> fileContent = new ArrayList<Task>();
@@ -150,5 +146,4 @@ public class FileHandler {
 		}
 		return Constants.SUCCESS;
 	}
-
 }

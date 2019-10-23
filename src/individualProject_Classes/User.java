@@ -13,19 +13,15 @@ public class User {
 	private static ToDoList toDoList;
 	private static Scanner scan1 = new Scanner(System.in);
 	private static Scanner scan2 = new Scanner(System.in).useDelimiter("\n");
-
 	public User(String name) {
 		this.userName = name;
 	}
-
 	public String getUserName() {
 		return userName;
 	}
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
 // statToDoApp - this method is invoked by main method of the ToDolist application
 	public void startToDoApp(User user) {
 		toDoList = new ToDoList();
@@ -36,12 +32,14 @@ public class User {
 		Project project3 = new Project("School");
 		Project project4 = new Project("Trip");
 		Project project5 = new Project("Hobby");
+		Project project6 = new Project("ToDoList");
 
 		toDoList.addProjects(project1);
 		toDoList.addProjects(project2);
 		toDoList.addProjects(project3);
 		toDoList.addProjects(project4);
 		toDoList.addProjects(project5);
+		toDoList.addProjects(project6);
 
 		System.out.println("------------------------- Welcome to ToDoList Applciation ------------------------\n");
 		String numberOfTask = toDoList.loadUserTask(user);
@@ -52,13 +50,12 @@ public class User {
 		while (!quit) {
 
 			System.out.println("\nEnter your option from main menu : ");
-			int option ;
+			int option;
 			while (!scan1.hasNextInt()) {
 				System.out.println("Please enter number only");
-			   scan1.next();
-				
+				scan1.next();
 			}
-	        option = scan1.nextInt();
+			option = scan1.nextInt();
 			switch (option) {
 			case 1:
 				showProjectList();
@@ -78,16 +75,13 @@ public class User {
 			case 6:
 				quit = true;
 			}
-
 		}
-
 		scan1.close();
 		scan2.close();
 	}
 
 // showMenu() - This method shows the list of options in a menu 
 	public static void showMenu() {
-
 		System.out.println(">> Available options:\n" + ">> (1) Show Project List\n"
 				+ ">> (2) Show Task List (by date or project)\n" + ">> (3) Add New Task\n"
 				+ ">> (4) Edit Task (update, mark as done, remove)\n" + ">> (5) Show available Options\n"
@@ -103,18 +97,16 @@ public class User {
 			System.out.println(project.getProjectName());
 		}
 	}
-
 	/*
-	 * addTask() --- This method is used create or add an task to the project. This
-	 * method accepts task name,project name & duedate from user --- Validates the
-	 * date entered by the user against todays date --- validates the project name
-	 * --- validates the task : if the task is tried to included into the project
-	 * again --- shows appropriate messages if any errors occurs during validation
+	 * addTask() --- This method is used create or add an task to the project. ---
+	 * This method accepts task name,project name & duedate from user --- Validates
+	 * the date entered by the user against todays date ,validates the project
+	 * name,validates the task --- if the task is tried to included into the project
+	 * again shows appropriate messages if any errors occurs during validation ---
 	 * of the data
 	 */
 	public static void addTask() {
 		boolean chkTask = false;
-
 		System.out.println("Which project the task belongs to:");
 		String projectName = scan2.next();
 		Project project = toDoList.chkProject(projectName);
@@ -123,10 +115,8 @@ public class User {
 			projectName = scan2.next();
 			project = toDoList.chkProject(projectName);
 		}
-
 		System.out.println("Enter the task name: ");
 		String taskName = scan2.next();
-
 		chkTask = toDoList.isDuplicateTaskName(taskName);
 		while (chkTask == true) {
 			System.out.println("Task name is repeated, enter other task name: ");
@@ -151,9 +141,7 @@ public class User {
 		} else {
 			System.out.println("Task is not added !!!");
 		}
-
 	}
-
 	/*
 	 * showTaskList() --- This method shows list of tasks --- user can view tasks
 	 * list sorted by date --- user can view tasks lists sorted by project
@@ -161,26 +149,26 @@ public class User {
 	public static void showTaskList() {
 		System.out.println(
 				"Press 1 - to view tasks list sorted by date" + "\nPress 2 - to view tasks lists sorted by project");
-		int like = scan1.nextInt();
+		int like = scan1.nextInt(); 
 		switch (like) {
 		case 1:
-			System.out.println("Tasks list sorted by Date");
 			toDoList.showTaskListByDate();
 			break;
 		case 2:
-			System.out.println("Tasks list sorted by Project");
 			toDoList.showTaskListByProject();
 			break;
 		}
-
+		
 	}
-
-// editTask() - This method is used to perform the edit operation on a task
+/*
+ * editTask() - This method is used to perform the edit operation on a task
+ */
 	public static void editTask() {
 		toDoList.editTask();
 	}
-
-// saveAndQuit() - This method is invoked by main method at the end of the application usuage
+/*
+ * saveAndQuit() - This method is invoked by main method at the end of the application usuage
+ */
 	public void saveAndQuit() {
 		System.out.println("Exiting from ToDoList application ... Thank you :)");
 	}
