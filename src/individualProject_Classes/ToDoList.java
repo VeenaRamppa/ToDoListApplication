@@ -1,8 +1,10 @@
 package individualProject_Classes;
+
 /* ToDoList class 
  * --- This class is the controller part of the ToDoList application.
  * --- This class methods are invoked by view part that is the User class
  */
+
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +12,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 public class ToDoList {
 	private List<Task> listOfTasks;
 	private List<Task> tmpTaskList;
@@ -17,33 +21,40 @@ public class ToDoList {
 	private FileHandler fileHandler;
 	private Scanner scan3 = new Scanner(System.in).useDelimiter("\n");
 	private Scanner scan4 = new Scanner(System.in);
-	private boolean quit = false;
+	private boolean validTaskName = false;
 	private String tmpTaskName;
 	private String msg;
 	private Task oldTask;
 	private Task newTask;
+
 	public ToDoList() {
 		this.setListOfTasks(new ArrayList<Task>());
 		this.setListOfProjects(new ArrayList<Project>());
 		this.fileHandler = new FileHandler();
 	}
+
 	public void setListOfTasks(List<Task> taskList) {
 		this.listOfTasks = taskList;
 		this.tmpTaskList = taskList;
 	}
+
 	public void setListOfProjects(List<Project> listOfProjects) {
 
 		this.listOfProjects = listOfProjects;
 	}
+
 	public List<Task> getListOfTasks() {
 		return this.listOfTasks;
 	}
+
 	public List<Project> getListOfProjects() {
 		return this.listOfProjects;
 	}
+
 	public void addProjects(Project project) {
 		listOfProjects.add(project);
 	}
+
 	/*
 	 * isDuplicateTaskName() --- this method is used to check the repetition of the
 	 * task --- Input parameter to this method is the Task class object and returns
@@ -62,6 +73,7 @@ public class ToDoList {
 		}
 		return taskFlag;
 	}
+
 	/*
 	 * chkProjects() --- this method is used to check for the valid project name ---
 	 * this method accepts a string value as input parameter and returns the object
@@ -79,6 +91,7 @@ public class ToDoList {
 		}
 		return null;
 	}
+
 	/*
 	 * loadUserTask() --- this method is used to find the number of complete and
 	 * pending tasks for a user --- this method is invoked to display the total
@@ -106,6 +119,7 @@ public class ToDoList {
 		}
 		return retString;
 	}
+
 	/*
 	 * addTask() --- This method is used to add a task with the supplied details and
 	 * write the same in to a file --- this method accepts 3 string values task
@@ -131,6 +145,7 @@ public class ToDoList {
 		}
 		return chkFlag;
 	}
+
 	/*
 	 * showTaskListByDate() --- this method is used to show the list of tasks sorted
 	 * by date --- this method uses the sort() method of Collections class to sort
@@ -150,6 +165,7 @@ public class ToDoList {
 		}
 		return retStr;
 	}
+
 	/*
 	 * showTaskListByProject() --- this method is used to show the list of tasks
 	 * sorted by project name --- this method uses the Collections class sort()
@@ -170,6 +186,7 @@ public class ToDoList {
 		}
 		return retStr;
 	}
+
 	/*
 	 * printTask() --- this method is used by showTaskListByDate() &
 	 * showTaskListByProject() operations to show the list of tasks
@@ -187,6 +204,7 @@ public class ToDoList {
 			System.out.println();
 		}
 	}
+
 	/*
 	 * editTask() --- this method provides the menu details to edit a task --- this
 	 * operation accepts project name in which the task to modified by title/due
@@ -195,8 +213,8 @@ public class ToDoList {
 	 * to go back to the main menu
 	 */
 	public void editTask() {
-		boolean validTaskName = false;
-		System.out.println("In which project task to be modified ? \n\nEnter the project name : ");
+		boolean quit = false;
+		System.out.println("In which project you want update the task?");
 		String editProjectName = scan3.next();
 		Project project = chkProject(editProjectName);
 		while (project == null) {
@@ -210,8 +228,7 @@ public class ToDoList {
 		for (Task t : tmpTaskList) {
 			System.out.println(t.toString().replace(',', '\t'));
 		}
-		System.out.println();
-		System.out.println("Enter the title of the task to be modified");
+		System.out.println("\n Enter the title of the task to be modified");
 		tmpTaskName = scan3.next();
 		validTaskName = isValidTaskTitle(tmpTaskList, tmpTaskName);
 		while (!validTaskName) {
@@ -219,32 +236,31 @@ public class ToDoList {
 			tmpTaskName = scan3.next();
 			validTaskName = isValidTaskTitle(tmpTaskList, tmpTaskName);
 		}
+
+		oldTask = new Task();
+		newTask = new Task();
+		for (Task tmpTask : tmpTaskList) {
+			if (tmpTask.getTaskTitle().equals(tmpTaskName)) {
+				oldTask = tmpTask;
+				newTask = tmpTask;
+			}
+		}
 		while (!quit) {
 			editMenu();
-			System.out.println("\nEnter your option: ");
-			int choice;
+			System.out.println("\nEnter your option from edit menu : ");
+			int option;
 			while (!scan4.hasNextInt()) {
 				System.out.println("Please enter number only");
 				scan4.next();
-
 			}
-			choice = scan4.nextInt();
-			oldTask = new Task();
-			newTask = new Task();
-			for (Task tmpTask : tmpTaskList) {
-				if (tmpTask.getTaskTitle().equals(tmpTaskName)) {
-					oldTask = tmpTask;
-					newTask = tmpTask;
-				}
-			}
-			List<Task> listOfOtherProject = getOtherProjectTask(editProjectName);
-			switch (choice) {
+			option = scan4.nextInt();
+			switch (option) {
 			case 1:
-				System.out.println("Ente new title:");
+				System.out.println("Enter new title:");
 				String title = scan3.next();
 				newTask.setTitle(title);
-				msg = update(oldTask, newTask, tmpTaskList, listOfOtherProject);
-				System.out.println(msg);
+				msg = update(oldTask, newTask, tmpTaskList, editProjectName);
+				System.out.println("Updating of title is " + msg);
 				break;
 			case 2:
 				System.out.println("Enter new date(MM/dd/yyyy):");
@@ -260,8 +276,8 @@ public class ToDoList {
 					e.printStackTrace();
 				}
 				newTask.setDueDate(newDate);
-				msg = update(oldTask, newTask, tmpTaskList, listOfOtherProject);
-				System.out.println(msg);
+				msg = update(oldTask, newTask, tmpTaskList, editProjectName);
+				System.out.println("Updating of date is " + msg);
 				break;
 			case 3:
 				System.out.println("Please enter the new status(Progress or Done):");
@@ -271,76 +287,68 @@ public class ToDoList {
 				} else if (status.equalsIgnoreCase("Done")) {
 					newTask.setStatus(Constants.END_STATUS);
 				}
-				msg = update(oldTask, newTask, tmpTaskList, listOfOtherProject);
-				System.out.println(msg);
+				msg = update(oldTask, newTask, tmpTaskList, editProjectName);
+				System.out.println("Updating of status is " + msg);
 				break;
 			case 4:
-				msg = removeTask(tmpTaskName, tmpTaskList, listOfOtherProject);
-				System.out.println(msg);
+				msg = removeTask(oldTask, tmpTaskList, editProjectName);
+				System.out.println("Removal of task is " + msg);
 				break;
 			case 5:
 				quit = true;
-				break;
 			}
 		}
 	}
-/* 
- * editMenu() - contains the menu holding list of options to edit a task 
- */
+
+	/*
+	 * editMenu() - contains the menu holding list of options to edit a task
+	 */
 	public void editMenu() {
 		System.out.println("\nEdit Menu: \n" + "----------------\n" + "Press 1 to change task title \n"
 				+ "Press 2 to change due date \n" + "Press 3 to change status \n" + "Press 4 to remove task \n"
 				+ "Press 5 to go to Main menu \n");
 	}
+
 // removeTask() - this operation is used to remove a task from the project and update the file accordingly
-	public String removeTask(String str, List<Task> tmpTaskList, List<Task> listOfOtherProject) {
-		Iterator<Task> iterator = tmpTaskList.iterator();
-		while (iterator.hasNext()) {
-			if (iterator.next().getTaskTitle().equals(str)) {
-				iterator.remove();
-			}
-		}
-		for (Task tmp : listOfOtherProject) {
-			tmpTaskList.add(tmp);
-		}
-		String msg = fileHandler.writeToFile(tmpTaskList);
+	public String removeTask(Task removeTask, List<Task> tmpTaskList, String editProjectName) {
+		List<Task> listOfOtherProject = getOtherProjectTask(editProjectName);
+		int index = tmpTaskList.indexOf(removeTask);
+		tmpTaskList.remove(index);
+		listOfOtherProject.addAll(tmpTaskList);
+		String msg = fileHandler.writeToFile(listOfOtherProject);
 		return "Remove of task is " + msg;
 	}
 
-/*
- * update() - this method is invoked whenever user modifies the title,status,duedate to upate the changes in to file
- */
-	public String update(Task oldTask, Task newTask, List<Task> tmpTaskList, List<Task> listOfOtherProject) {
+	/*
+	 * update() - this method is invoked whenever user modifies the
+	 * title,status,duedate to upate the changes in to file
+	 */
+	public String update(Task oldTask, Task newTask, List<Task> tmpTaskList, String editProjectName) {
 		int index = -1;
-		for (Task t : tmpTaskList) {
-			if (t.equals(oldTask))
-				index = tmpTaskList.indexOf(oldTask);
-		}
+		List<Task> listOfOtherProject = getOtherProjectTask(editProjectName);
+		index = tmpTaskList.indexOf(oldTask); 
 		tmpTaskList.set(index, newTask);
-		for (Task tmp : listOfOtherProject) {
-			tmpTaskList.add(tmp);
-		}
-		String retStr = fileHandler.writeToFile(tmpTaskList);
+		listOfOtherProject.addAll(tmpTaskList);
+		String retStr = fileHandler.writeToFile(listOfOtherProject);
 		return "Updating of the file is " + retStr;
 	}
-/*
- * getOtherProjectTask() - this method is used to get the list other project task details while updating the file after editing a task
- */
+
+	/*
+	 * getOtherProjectTask() - this method is used to get the list other project
+	 * task details while updating the file after editing a task
+	 */
 	private List<Task> getOtherProjectTask(String projectName) {
 		List<Task> taskList = fileHandler.readFromFile();
-		List<Task> listOfOtherProject = new ArrayList<Task>();
-		for (int i = 0; i < taskList.size(); i++) {
-			Task tmpTask = taskList.get(i);
-			if (!(tmpTask.getProjectName().equalsIgnoreCase(projectName))) {
-				listOfOtherProject.add(tmpTask);
-			}
-		}
+		List<Task> listOfOtherProject = taskList.stream()
+				.filter(task -> !projectName.equalsIgnoreCase(task.getProjectName())).collect(Collectors.toList());
 		return listOfOtherProject;
 	}
-/*
- * isValidTaskTitle() - this method is used while editing a task
- * --- when user enters the title of the task to be edited this method validates the user input against the value in the file
- */
+
+	/*
+	 * isValidTaskTitle() - this method is used while editing a task --- when user
+	 * enters the title of the task to be edited this method validates the user
+	 * input against the value in the file
+	 */
 	public boolean isValidTaskTitle(List<Task> tmpTaskList, String tmpTaskName) {
 		boolean taskFlag = false;
 		if (tmpTaskList.size() >= 0) {
